@@ -2,19 +2,19 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Norseman&#39;s</title>
-    <link>http://replace-this-with-your-domain.com/index.xml</link>
+    <link>https://northofthule.github.io/index.xml</link>
     <description>Recent content on Norseman&#39;s</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sat, 15 Oct 2016 23:57:39 +0200</lastBuildDate>
-    <atom:link href="http://replace-this-with-your-domain.com/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://northofthule.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Notes on Habits</title>
-      <link>http://replace-this-with-your-domain.com/post/habits/</link>
+      <link>https://northofthule.github.io/post/habits/</link>
       <pubDate>Sat, 15 Oct 2016 23:57:39 +0200</pubDate>
       
-      <guid>http://replace-this-with-your-domain.com/post/habits/</guid>
+      <guid>https://northofthule.github.io/post/habits/</guid>
       <description>
 
 &lt;p&gt;I have for the last couple of months tracked my habits using &lt;a href=&#34;https://play.google.com/store/apps/details?id=org.isoron.uhabits&#34;&gt;Loop - Habit Tracker&lt;/a&gt; and I think I might have discovered the holy grail of getting anything and everything done.&lt;/p&gt;
@@ -59,10 +59,10 @@ Aim low and you will reach high!&lt;/p&gt;
     
     <item>
       <title>Welcome</title>
-      <link>http://replace-this-with-your-domain.com/post/welcome/</link>
+      <link>https://northofthule.github.io/post/welcome/</link>
       <pubDate>Sat, 15 Oct 2016 08:51:45 +0200</pubDate>
       
-      <guid>http://replace-this-with-your-domain.com/post/welcome/</guid>
+      <guid>https://northofthule.github.io/post/welcome/</guid>
       <description>&lt;p&gt;Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum&lt;/p&gt;
 </description>
     </item>

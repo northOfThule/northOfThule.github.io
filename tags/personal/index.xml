@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Norseman&#39;s</title>
-    <link>http://replace-this-with-your-domain.com/tags/personal/index.xml</link>
+    <link>https://northofthule.github.io/tags/personal/index.xml</link>
     <description>Recent content on Norseman&#39;s</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <atom:link href="http://replace-this-with-your-domain.com/tags/personal/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://northofthule.github.io/tags/personal/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
       <title>Notes on Habits</title>
-      <link>http://replace-this-with-your-domain.com/post/habits/</link>
+      <link>https://northofthule.github.io/post/habits/</link>
       <pubDate>Sat, 15 Oct 2016 23:57:39 +0200</pubDate>
       
-      <guid>http://replace-this-with-your-domain.com/post/habits/</guid>
+      <guid>https://northofthule.github.io/post/habits/</guid>
       <description>
 
 &lt;p&gt;I have for the last couple of months tracked my habits using &lt;a href=&#34;https://play.google.com/store/apps/details?id=org.isoron.uhabits&#34;&gt;Loop - Habit Tracker&lt;/a&gt; and I think I might have discovered the holy grail of getting anything and everything done.&lt;/p&gt;
