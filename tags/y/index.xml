@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Norseman&#39;s</title>
+    <link>https://northofthule.github.io/tags/y/index.xml</link>
+    <description>Recent content on Norseman&#39;s</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <atom:link href="https://northofthule.github.io/tags/y/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>test</title>
+      <link>https://northofthule.github.io/content/post/test/</link>
+      <pubDate>Sat, 22 Oct 2016 13:20:53 +0200</pubDate>
+      
+      <guid>https://northofthule.github.io/content/post/test/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
