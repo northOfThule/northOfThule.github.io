@@ -6,16 +6,51 @@
     <description>Recent content on Norseman&#39;s</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 22 Oct 2016 13:20:53 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 23 Oct 2016 21:04:47 +0200</lastBuildDate>
     <atom:link href="https://northofthule.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     <item>
-      <title>test</title>
-      <link>https://northofthule.github.io/content/post/test/</link>
-      <pubDate>Sat, 22 Oct 2016 13:20:53 +0200</pubDate>
+      <title>Multitprocessing</title>
+      <link>https://northofthule.github.io/post/multitprocessing/</link>
+      <pubDate>Sun, 23 Oct 2016 21:04:47 +0200</pubDate>
       
-      <guid>https://northofthule.github.io/content/post/test/</guid>
-      <description></description>
+      <guid>https://northofthule.github.io/post/multitprocessing/</guid>
+      <description>&lt;p&gt;I was working on a small script which needed to fetch some PDFs from a server, turn them to text and compare some data. I played around in bash, cURL and a tiny bit of python and were able to get the result I wanted. It was more of less just a for loop where every cURL call and post-processing was forked to a subprocess. The code executed in around 6s and it was written in just a few tens of code. But no matter how fast it execute or few lines needed Bash always fails me when I need to make modifications to the script. So therefore I thought I can re-implement the code in Python.&lt;/p&gt;
+
+&lt;p&gt;When I implemented my code I started off by using the &lt;a href=&#34;https://docs.python.org/2/library/threading.html&#34;&gt;Threading API&lt;/a&gt;. However, when I was testing the code I realized it was running in around 20s compared to the 6s for the bash implementation.. Obviously something was wrong and after googling a few minutes I realized I&amp;rsquo;ve been sold the wrong API! Apparently Python uses something called GIL, Global Interpreter Lock, which seemed to result in my program not utilizing all those expensive cores I bought. Instead I should have used &lt;a href=&#34;https://docs.python.org/2/library/multiprocessing.html&#34;&gt;Multiprocessing&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Using the API is very convenient. You just need to initiate a Pool object with the number of processes you want to spawn, &lt;code&gt;p = multiprocessing.Pool(&amp;lt;number-of-processes&amp;gt;)&lt;/code&gt;. After that you create a function which do the job you want to send of to all those processes in the pool. After that you are ready to use the &lt;code&gt;map(&amp;lt;function&amp;gt;, &amp;lt;Iterable&amp;gt;)&lt;/code&gt; method of your Pool. Map will run the function in parallel, return the results to a list while taking care of all the unpleasant details of multiprocessing.&lt;/p&gt;
+
+&lt;p&gt;After changing to the multiprocessing API my program become both shorter and simpler. And most importantly, the execution time went from 20s+ to below 6s - even beating my initial Bash-implementation!&lt;/p&gt;
+
+&lt;p&gt;Below is a sample with the most important code parts.&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;def crawl(n_fs):
+    name = n_fs[0]
+    url = n_fs[1]
+
+    # Get the PDF from the Intertubes
+    # If link broken return None
+    try:
+        response = urllib2.urlopen(url)
+    except IOError:
+        traceback.print_exc()
+        print name + &amp;quot;: link is broken&amp;quot;
+        return;
+   
+    # read the url-content into BinaryIO f
+    f = io.BytesIO(response.read())
+
+    # convert the pdf to text and get the PE, PE-fwd and PB
+    lines = convert_pdf_to_txt(f).split(&#39;\n&#39;)
+    return (name, lines)
+
+if __name__ == &amp;quot;__main__&amp;quot;:
+    num_threads = min(50, len(factsheets))
+    p = multiprocessing.Pool(num_threads)
+    results = p.map(crawl, factsheets)
+&lt;/code&gt;&lt;/pre&gt;
+</description>
     </item>
     
     <item>

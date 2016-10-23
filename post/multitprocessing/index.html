@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+    <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Multitprocessing &middot; Norseman&#39;s</title>
+    <meta name="author" content="Norseman">
+    <meta name="description" content="Your description of the blog">
+    <meta name="generator" content="Hugo 0.17" />
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+    <!-- RSS autodiscovery -->
+    
+
+    <link rel="shortcut icon" href="https://northofthule.github.io/img/favicon.ico">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/normalize/2.1.2/normalize.min.css">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="https://northofthule.github.io/css/screen.css">
+    <link rel="stylesheet" href="https://northofthule.github.io/css/github.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/default.min.css">
+
+    <!-- Stylesheet for theme color -->
+    <style type="text/css">
+    a, a:visited {color: #3498db;}
+    .pagination a {color: #3498db;}
+    .gist .gist-file .gist-meta a:visited {color: #3498db !important;}
+    a:focus, a:hover {color: #2079b4;}
+    h1.post-title a:focus, h1.post-title a:hover, h1.blog-title a:focus, h1.blog-title a:hover {color: #2079b4;}
+    .older-posts:hover, .newer-posts:hover {color: #2079b4;}
+</style>
+</head>
+
+<body class="post-template">
+
+    <header id="site-head">
+	
+	<h1 class="blog-title"><a href="https://northofthule.github.io/">Norseman&rsquo;s</a></h1>
+	
+	
+	<h1 class="blog-subtitle">guide to Thule</h1>
+	
+</header>
+    
+
+    <main class="content" role="main">
+	    <article class="post">
+	        <header>
+	        <h1 class="post-title">Multitprocessing</h1>
+	        <div class="post-meta"><time datetime="23 October 2016">23 October 2016</time></div>
+	        </header>
+
+	        <section class="post-content">
+	            <p>I was working on a small script which needed to fetch some PDFs from a server, turn them to text and compare some data. I played around in bash, cURL and a tiny bit of python and were able to get the result I wanted. It was more of less just a for loop where every cURL call and post-processing was forked to a subprocess. The code executed in around 6s and it was written in just a few tens of code. But no matter how fast it execute or few lines needed Bash always fails me when I need to make modifications to the script. So therefore I thought I can re-implement the code in Python.</p>
+
+<p>When I implemented my code I started off by using the <a href="https://docs.python.org/2/library/threading.html">Threading API</a>. However, when I was testing the code I realized it was running in around 20s compared to the 6s for the bash implementation.. Obviously something was wrong and after googling a few minutes I realized I&rsquo;ve been sold the wrong API! Apparently Python uses something called GIL, Global Interpreter Lock, which seemed to result in my program not utilizing all those expensive cores I bought. Instead I should have used <a href="https://docs.python.org/2/library/multiprocessing.html">Multiprocessing</a>.</p>
+
+<p>Using the API is very convenient. You just need to initiate a Pool object with the number of processes you want to spawn, <code>p = multiprocessing.Pool(&lt;number-of-processes&gt;)</code>. After that you create a function which do the job you want to send of to all those processes in the pool. After that you are ready to use the <code>map(&lt;function&gt;, &lt;Iterable&gt;)</code> method of your Pool. Map will run the function in parallel, return the results to a list while taking care of all the unpleasant details of multiprocessing.</p>
+
+<p>After changing to the multiprocessing API my program become both shorter and simpler. And most importantly, the execution time went from 20s+ to below 6s - even beating my initial Bash-implementation!</p>
+
+<p>Below is a sample with the most important code parts.</p>
+
+<pre><code>def crawl(n_fs):
+    name = n_fs[0]
+    url = n_fs[1]
+
+    # Get the PDF from the Intertubes
+    # If link broken return None
+    try:
+        response = urllib2.urlopen(url)
+    except IOError:
+        traceback.print_exc()
+        print name + &quot;: link is broken&quot;
+        return;
+   
+    # read the url-content into BinaryIO f
+    f = io.BytesIO(response.read())
+
+    # convert the pdf to text and get the PE, PE-fwd and PB
+    lines = convert_pdf_to_txt(f).split('\n')
+    return (name, lines)
+
+if __name__ == &quot;__main__&quot;:
+    num_threads = min(50, len(factsheets))
+    p = multiprocessing.Pool(num_threads)
+    results = p.map(crawl, factsheets)
+</code></pre>
+
+	        </section>
+
+	        <section class="post-tags" style="padding-bottom:60px;">
+	            <div class="post-meta tags">
+	            <i class="fa fa-fw fa-tag"></i>
+	            
+	            </div>
+	        </section>
+			
+			
+			
+			
+
+	        <section class="share">
+	            <p class="backtotop"><a data-scroll href="#site-head"><i class="fa fa-lg fa-fw fa-angle-double-up"></i></a><a data-scroll class="backtotoptext" href="#site-head"> Back to top</a></p>
+	            <p class="info prompt">Share</p>
+	            <a href="http://twitter.com/share?text=Multitprocessing&url=https%3a%2f%2fnorthofthule.github.io%2fpost%2fmultitprocessing%2f" title="Share on Twitter"
+	                onclick="window.open(this.href, 'twitter-share', 'width=550,height=235');return false;">
+	                <i class="fa fa-2x fa-fw fa-twitter-square"></i> <span class="hidden">Twitter</span>
+	            </a>
+	            <a href="https://www.facebook.com/sharer/sharer.php?u=https%3a%2f%2fnorthofthule.github.io%2fpost%2fmultitprocessing%2f" title="Share on Facebook"
+	                onclick="window.open(this.href, 'facebook-share','width=580,height=296');return false;">
+	                <i class="fa fa-2x fa-fw fa-facebook-square" style="margin-left: -8px"></i> <span class="hidden">Facebook</span>
+	            </a>
+	            <a href="https://plus.google.com/share?url=https%3a%2f%2fnorthofthule.github.io%2fpost%2fmultitprocessing%2f" title="Share on Google+"
+	               onclick="window.open(this.href, 'google-plus-share', 'width=490,height=530');return false;">
+	                <i class="fa fa-2x fa-fw fa-google-plus-square" style="margin-left: -8px"></i> <span class="hidden">Google+</span>
+	            </a>
+	        </section>
+
+	        <footer class="post-footer">
+	            <section class="author">
+    <div class="authorimage" style="background: url(https://northofthule.github.io/img/avatar.jpg)"></div>
+    <h4>Norseman</h4>
+    <p class="bio"></p>
+    <p class="meta">
+      
+    </p>
+</section>
+	        </footer>
+	    </article>
+	</main>
+
+    <footer class="site-footer">
+	<div class="inner">
+		<section class="footer-social">
+			
+		    
+		    
+		    <a href="" target="_blank" title="RSS"><i class="fa fa-2x fa-fw fa-rss"></i> <span class="hidden">RSS</span></a>
+		</section>
+
+		<section class="copyright">&copy; 2016 <a href="https://northofthule.github.io/">Norseman</a>. </section>
+	</div>
+</footer>
+
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script src="https://northofthule.github.io/js/index.js"></script>
+<script src="https://northofthule.github.io/js/smooth-scroll.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+
+<script>
+    smoothScroll.init({
+        speed: 800,
+        easing: 'easeInOutCubic',
+        updateURL: false,
+        offset: 125,
+    });
+</script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+
+
+</body>
+</html>
